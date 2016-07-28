@@ -1,22 +1,37 @@
 package com.example.web;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
 import java.util.List;
 
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "request")
+@JsonIgnoreProperties(ignoreUnknown=true)
+@JacksonXmlRootElement
 public class Request {
-    @XmlElement(required = true)
+
+    @JacksonXmlProperty(localName = "request-type")
+    protected String requestType;
+
+    @JacksonXmlProperty(localName = "parameters")
+    @JacksonXmlElementWrapper(useWrapping=false)
     protected List<Parameter> parameters;
 
+
     public List<Parameter> getParameters() {
-        if (parameters == null) {
-            parameters = new ArrayList();
-        }
         return parameters;
+    }
+
+    public void setParameters(List<Parameter> parameters) {
+        this.parameters = parameters;
+    }
+
+    public String getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(String requestType) {
+        this.requestType = requestType;
     }
 }

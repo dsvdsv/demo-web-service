@@ -1,15 +1,16 @@
 package com.example.web;
 
-import javax.xml.bind.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "extra", propOrder = { "name" })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Parameter {
-    @XmlAttribute(required = true)
+    @JacksonXmlProperty(isAttribute = true, localName = "name")
     protected String name;
 
-    @XmlValue()
-    protected String value;
+    @JacksonXmlText
+    protected Object value;
 
     public String getName() {
         return name;
@@ -19,11 +20,11 @@ public class Parameter {
         this.name = name;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 }

@@ -31,6 +31,11 @@ dependencies {
 	compile('org.apache.camel:camel-netty4-http:2.17.2')
 	compile('org.apache.camel:camel-jacksonxml:2.17.2')
 
+	compile('com.fasterxml.jackson.core:jackson-databind:2.8.1')
+	compile('com.fasterxml.jackson.core:jackson-annotations:2.8.1')
+	compile('com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.8.1')
+	compile('com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.8.1')
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework:spring-web:4.2.7.RELEASE')
 	testCompile('org.apache.httpcomponents:httpclient:4.5.2')

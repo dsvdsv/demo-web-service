@@ -22,16 +22,16 @@ public class ApplicationTests {
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
 			"<request>\n" +
 			"  <request-type>CREATE-AGT</request-type>\n" +
-			"  <extra name=\"login\">123456</extra>\n" +
-			"  <extra name=\"password\">pwd</extra>\n" +
+			"  <parameters name=\"login\">123456</parameters>\n" +
+			"  <parameters name=\"password\">pwd</parameters>\n" +
 			"</request>\n";
 
 	private final String balanceReq =
 			"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
 			"<request>\n" +
 			"  <request-type>GET-BALANCE</request-type>\n" +
-			"  <extra name=\"login\">123456</extra>\n" +
-			"  <extra name=\"password\">pwd</extra>\n" +
+			"  <parameters name=\"login\">123456</parameters>\n" +
+			"  <parameters name=\"password\">pwd</parameters>\n" +
 			"</request>\n";
 
 	@Test(expected = HttpClientErrorException.class)
@@ -61,7 +61,7 @@ public class ApplicationTests {
 				"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
 				"<response>\n" +
 				"  <result-code>0</result-code>\n" +
-				"  <extra name=\"balance\">0</extra>\n" +
+				"  <parameters name=\"balance\">0</parameters>\n" +
 				"</response>\n";
 
 		assertEquals(expectedResponse, actualResponse);

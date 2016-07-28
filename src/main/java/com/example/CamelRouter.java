@@ -1,12 +1,12 @@
 package com.example;
 
+import com.example.web.Request;
 import org.apache.camel.Exchange;
 import org.apache.camel.Predicate;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jacksonxml.JacksonXMLDataFormat;
-import org.apache.camel.spi.DataFormat;
-import org.omg.CORBA.Request;
+import org.apache.camel.spi.DataFormat;;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,7 +14,7 @@ public class CamelRouter extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        JacksonXMLDataFormat ageViewFormat = new JacksonXMLDataFormat(Request.class);
+        JacksonXMLDataFormat requestFormat = new JacksonXMLDataFormat(Request.class);
 
         from("netty4-http:http://0.0.0.0:8080/endpoint?httpMethodRestrict=POST")
                 .convertBodyTo(String.class)
@@ -31,7 +31,7 @@ public class CamelRouter extends RouteBuilder {
                                     "</response>\n");
 
         from("direct:create-agt")
-                .unmarshal(ageViewFormat)
+                .unmarshal(requestFormat)
                 .process(new Processor() {
                     @Override
                     public void process(Exchange exchange) throws Exception {
