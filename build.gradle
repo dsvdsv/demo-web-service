@@ -29,6 +29,7 @@ repositories {
 dependencies {
 	compile('org.apache.camel:camel-spring-boot-starter:2.17.2')
 	compile('org.apache.camel:camel-netty4-http:2.17.2')
+	compile('org.apache.camel:camel-jacksonxml:2.17.2')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework:spring-web:4.2.7.RELEASE')
