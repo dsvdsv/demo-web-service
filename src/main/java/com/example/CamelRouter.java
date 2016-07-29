@@ -32,13 +32,13 @@ public class CamelRouter extends SpringRouteBuilder {
                 .convertBodyTo(String.class)
                 .choice()
                     .when(xpath("//request-type='CREATE-AGT'"))
-                        .to("direct:create-agt")
+                        .to("direct:register-account")
                     .when(xpath("//request-type='GET-BALANCE'"))
                         .to("direct:get-balance")
                     .otherwise()
                         .throwException(new IllegalArgumentException("required correct request-type"));
 
-        from("direct:create-agt")
+        from("direct:register-account")
                 .unmarshal(requestFormat)
                 .process(lookup(RegisterAccountProcessor.class))
                 .marshal(responseFormat);
