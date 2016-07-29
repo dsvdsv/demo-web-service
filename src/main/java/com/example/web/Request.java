@@ -7,15 +7,15 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown=true)
-@JacksonXmlRootElement
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JacksonXmlRootElement(localName = "request")
 public class Request {
 
     @JacksonXmlProperty(localName = "request-type")
     protected String requestType;
 
-    @JacksonXmlProperty(localName = "parameters")
-    @JacksonXmlElementWrapper(useWrapping=false)
+    @JacksonXmlProperty(localName = "extra")
+    @JacksonXmlElementWrapper(useWrapping = false)
     protected List<Parameter> parameters;
 
 

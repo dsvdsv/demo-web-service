@@ -21,6 +21,11 @@ jar {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+compileJava {
+	options.encoding = 'UTF-8'
+	options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
 repositories {
 	mavenCentral()
 }
@@ -47,4 +52,9 @@ eclipse {
 		 containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
 		 containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
 	}
+}
+
+test {
+	// show standard out and standard error of the test JVM(s) on the console
+	testLogging.showStandardStreams = true
 }

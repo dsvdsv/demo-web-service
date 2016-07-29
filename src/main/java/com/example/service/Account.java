@@ -1,4 +1,4 @@
-package com.example;
+package com.example.service;
 
 public class Account {
     private final String login;
@@ -34,16 +34,13 @@ public class Account {
 
         Account account = (Account) o;
 
-        if (login != null ? !login.equals(account.login) : account.login != null) return false;
-        return password != null ? password.equals(account.password) : account.password == null;
+        return login != null ? login.equals(account.login) : account.login == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = login != null ? login.hashCode() : 0;
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        return result;
+        return login != null ? login.hashCode() : 0;
     }
 
     @Override

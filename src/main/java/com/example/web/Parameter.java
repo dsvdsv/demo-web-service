@@ -12,6 +12,14 @@ public class Parameter {
     @JacksonXmlText
     protected Object value;
 
+    public Parameter() {
+    }
+
+    public Parameter(String name, double balance) {
+        this.name = name;
+        this.value = balance;
+    }
+
     public String getName() {
         return name;
     }

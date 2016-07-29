@@ -1,20 +1,32 @@
 package com.example;
 
+import com.example.service.GetBalanceProcessor;
+import com.example.service.RegisterAccountProcessor;
 import com.example.web.Request;
-import org.apache.camel.Exchange;
-import org.apache.camel.Predicate;
-import org.apache.camel.Processor;
-import org.apache.camel.builder.RouteBuilder;
+import com.example.web.Response;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import org.apache.camel.component.jacksonxml.JacksonXMLDataFormat;
-import org.apache.camel.spi.DataFormat;;
+import org.apache.camel.spring.SpringRouteBuilder;
 import org.springframework.stereotype.Component;
 
+;
+
 @Component
-public class CamelRouter extends RouteBuilder {
+public class CamelRouter extends SpringRouteBuilder {
     @Override
     public void configure() throws Exception {
 
-        JacksonXMLDataFormat requestFormat = new JacksonXMLDataFormat(Request.class);
+        // @formatter:off
+
+        JacksonXMLDataFormat requestFormat = jacksonXMLDataFormat(Request.class);
+        JacksonXMLDataFormat responseFormat = jacksonXMLDataFormat(Response.class);
+
+
+        onException(Exception.class)
+                .handled(true)
+                .transform().method(ExceptionTransformer.class)
+                .marshal(responseFormat);
 
         from("netty4-http:http://0.0.0.0:8080/endpoint?httpMethodRestrict=POST")
                 .convertBodyTo(String.class)
@@ -22,24 +34,32 @@ public class CamelRouter extends RouteBuilder {
                     .when(xpath("//request-type='CREATE-AGT'"))
                         .to("direct:create-agt")
                     .when(xpath("//request-type='GET-BALANCE'"))
-                        .to("direct:get-balance")
+                        .to("direct:byLogin-balance")
                     .otherwise()
-                        .transform().constant(
-                                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                                    "<response>\n" +
-                                        "<result-code>2</result-code>\n" +
-                                    "</response>\n");
+                        .throwException(new IllegalArgumentException("required correct request-type"));
 
         from("direct:create-agt")
                 .unmarshal(requestFormat)
-                .process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        Object in = exchange.getIn();
-                    }
-                })
-                .transform(constant("<order id=\"123\">OK</order>"));
+                .process(lookup(RegisterAccountProcessor.class))
+                .marshal(responseFormat);
 
-        from("direct:get-balance").transform(constant("<order id=\"321\">OK</order>"));
+        from("direct:byLogin-balance")
+                .unmarshal(requestFormat)
+                .process(lookup(GetBalanceProcessor.class))
+                .marshal(responseFormat);
+
+        // @formatter:on
+    }
+
+    private JacksonXMLDataFormat jacksonXMLDataFormat(Class<?> unmarshalType) {
+        JacksonXMLDataFormat format = new JacksonXMLDataFormat(Request.class);
+
+        XmlMapper xmlMapper = new XmlMapper();
+        xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
+
+        format.setXmlMapper(xmlMapper);
+
+        return format;
+
     }
 }
